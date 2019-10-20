@@ -27,6 +27,9 @@
             <p class="price">
               {{product.price | formatPrice}}
             </p>
+            <button class="btn btn-primary btn-lg" v-on:click="addToCart">
+              Add to Cart
+            </button>
           </div>
         </div>
       </main>
@@ -45,6 +48,29 @@
                          "유기농 25파운드 사료입니다.",
             price: 2000,
             image: "assets/images/product-fullsize.png"
+          },
+          cart: []
+        },
+        methods: {
+          addToCart: function() {
+            this.cart.push(this.product.id);
+          }
+        },
+        filters: {
+          formatPrice(price) {	//#B
+            if (!parseInt(price)) { return ""; }	//#C
+            if (price > 99999) {	//#D
+              var priceString = (price / 100).toFixed(2);	//#E
+              var priceArray = priceString.split("").reverse();	//#F
+              var index = 3;	//#F
+              while (priceArray.length > index + 3) {	//#F
+                priceArray.splice(index+3, 0, ",");	//#F
+                index += 4;	//#F
+              }	//#F
+              return "$" + priceArray.reverse().join("");	//#G
+            } else {
+              return "$" + (price / 100).toFixed(2);	//#H
+            }
           }
         },
         beforeCreate: function() {
